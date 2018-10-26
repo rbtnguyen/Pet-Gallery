@@ -1,1 +1,186 @@
-<!-- Put your final HTML here -->
+<!DOCTYPE <!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Puppy Image Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TODO: SEO STUFF-->
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/app.css" />
+    <style>
+        .side-navigation {
+            position: fixed;
+            height: 200px;
+            width: 200px;
+            /* background-color: #282a36; */
+            background-color: #fee3c6;
+            /* transform: translateX(-300px); */
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: right;
+            color: #000;
+        }
+
+        .menu-open {
+            border: 2px solid black;
+            background-color: white;
+        }
+
+        .gallery-container {
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .photo-gallery {
+            overflow: hidden;
+            text-align: justify;
+        }
+
+        .pet-thumbnail-container {
+            height: 200px;
+            width: auto;
+            display: inline-block;
+            box-sizing: border-box;
+            margin: 15px;
+            /* float: left; */
+        }
+
+        .pet-thumbnail-image {
+            height: 100%;
+            width: auto;
+            position: relative;
+            box-sizing: border-box;
+            /* border: 1px solid gainsboro; */
+            /* border: 2px solid bisque; */
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            transition: transform 500ms, box-shadow 500ms;
+        }            
+
+        .pet-thumbnail-image:hover {
+            /* box-shadow: #282a36; */
+            /* box-shadow: 5px 5px bisque; */
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.7);
+
+            /* border: 5px solid bisque; */
+            transform: translate(0px, -5px);
+            transition: transform 300ms, box-shadow 300ms;
+        }
+
+        .photo-overlay {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .stop-scrolling {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        @media screen and (max-width: 768px) {
+
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="side-navigation">
+        <span class="menu-open">Menu</span>
+    </nav>
+    <header class="global-header" role="banner">
+        <h1>Puppy image gallery</h1>
+
+        <blockquote class="header-quote">
+            <p>A dog will teach you unconditional love. If you can have that in your life, things won't be too bad.</p>
+
+            <cite>&mdash;Robert Wagner</cite>
+        </blockquote>
+    </header>
+    <main class="gallery-container">
+        <section class="photo-gallery">
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/1.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/2.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/3.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/4.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/5.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/6.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/7.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/8.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/9.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/10.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/11.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/12.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/13.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/14.jpeg">
+            </div>
+            <div class="pet-thumbnail-container">
+                <img class="pet-thumbnail-image" src="assets/images/raw/15.jpeg">
+            </div>
+        </section>
+
+        <section>
+            <button>Load More</button>
+        </section>
+    </main>
+    <section class="photo-overlay">
+
+    </section>
+
+    <footer class="global-footer">
+        <p>Built by a wonderful developer for Asana.</p>
+    </footer>
+    <script>
+
+        function openDogLightBox() {
+
+        }
+
+        function loadMoreDogs() {
+
+        }
+
+    </script>
+
+</body>
+
+</html>

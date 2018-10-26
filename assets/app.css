@@ -23,6 +23,7 @@ a {
   padding-bottom: 2rem;
   padding-top: 2rem;
   text-align: center;
+  background-color: #fee3c6;
 }
 
 /* Header Quote */
@@ -36,7 +37,11 @@ a {
 
 /* Global Footer */
 .global-footer {
+  padding: 20px;
+  clear: both;
   color: var(--color);
   font-family: var(--font-serif);
   text-align: center;
+  background-color: #fee3c6;
+
 }

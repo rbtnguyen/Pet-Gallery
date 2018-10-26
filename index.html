@@ -10,12 +10,14 @@
     <link rel="stylesheet" type="text/css" media="screen" href="assets/app.css" />
     <style>
         .side-navigation {
-            position: fixed;
+            position: absolute;
             height: 200px;
             width: 200px;
+            box-sizing: border-box;
+            padding: 15px 0;
             /* background-color: #282a36; */
-            background-color: #fee3c6;
-            /* transform: translateX(-300px); */
+            /* background-color: #fee3c6; */
+            transform: translateX(-80px);
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 32px;
             font-weight: bold;
@@ -23,9 +25,100 @@
             color: #000;
         }
 
-        .menu-open {
+        .action-button {
+            display: inline-block;
+            position: relative;
+            box-sizing: border-box;
+            padding: 0px 7px;
             border: 2px solid black;
             background-color: white;
+            box-shadow: -4px 4px 0px 0 rgba(0, 0, 0, 1);
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .action-button:active {
+            box-shadow: -2px 2px 0px 0 rgba(0, 0, 0, 1);
+            transform: translate(-2px, 2px);
+        }
+
+        .action-button-menu {
+            width: 103px;
+            transition: width .5s;
+        }
+
+        .nav-text {
+            opacity: 1;
+        }
+
+        .nav-text-m {
+            transition: opacity .3s ease-out 1s;
+        }
+
+        .nav-text-other {
+            transition: opacity .3s ease-out .5s;
+        }
+
+        .menu-open {
+            width: 46px;
+            transition: width .5s;
+        }
+
+        .menu-open .nav-text-other{
+            opacity: 0;
+            /* transition: all .1s; */
+            transition: none;
+
+        }
+
+        .menu-open .nav-text-m{
+            opacity: 0;
+            transition: opacity .3s ease-out .5s;
+        }
+
+        .nav-close-bar {
+            width: 5px;
+            height: 23px;
+            display: block;
+            position: absolute;
+            top: 13px;
+            background-color: #000;
+            transform-origin: bottom;
+            transition: transform .5s ease-in-out .2s;
+        }
+
+        .nav-close-bar-left {
+            left: 9px;
+        }
+
+        .nav-close-bar-right {
+            left: 29px;
+        }
+
+        .menu-open .nav-close-bar {
+            /* top: 9px; */
+            /* border-radius: 50%; kind of looks cool but can't transition */
+            /* transition: all .5s ease-in-out .5s; */
+            transition: transform .5s ease-in-out .5s;
+
+        }
+
+        .menu-open .nav-close-bar-left {
+            /* left: 11px; */
+            transform: rotate(45deg) translate(-2px, -3px);
+            /* transition: transform .5s ease-in-out .5s; */
+        }
+
+        .menu-open .nav-close-bar-right {
+            /* left: 27px; */
+            transform: rotate(-45deg) translate(1px, -4px);
+            /* transition: transform .5s ease-in-out .5s; */
+        }
+
+        .action-button-load {
+
         }
 
         .gallery-container {
@@ -46,7 +139,6 @@
             display: inline-block;
             box-sizing: border-box;
             margin: 15px;
-            /* float: left; */
         }
 
         .pet-thumbnail-image {
@@ -54,27 +146,28 @@
             width: auto;
             position: relative;
             box-sizing: border-box;
-            /* border: 1px solid gainsboro; */
-            /* border: 2px solid bisque; */
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
             cursor: pointer;
             transition: transform 500ms, box-shadow 500ms;
         }            
 
         .pet-thumbnail-image:hover {
-            /* box-shadow: #282a36; */
             /* box-shadow: 5px 5px bisque; */
             box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.7);
-
             /* border: 5px solid bisque; */
             transform: translate(0px, -5px);
             transition: transform 300ms, box-shadow 300ms;
         }
 
+        .load-action-row {
+            padding: 15px;
+            text-align: center;
+        }
+
         .photo-overlay {
             position: fixed;
-            height: 100%;
-            width: 100%;
+            /* height: 100%;
+            width: 100%; */
             top: 0;
             right: 0;
             bottom: 0;
@@ -82,11 +175,33 @@
             background-color: rgba(0, 0, 0, 0.7);
             opacity: 0;
             pointer-events: none;
+            transition: opacity .5s; 
+        }
+
+        .photo-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+            transition: opacity .5s; 
         }
 
         .stop-scrolling {
             height: 100%;
             overflow: hidden;
+        }
+
+        .photo-overlay-container {
+            height: 800px;
+            width: 800px;
+            position: relative;
+            /* margin: 200px auto; */
+            text-align: center;
+        }
+
+        .photo-overlay-container img {
+            /* height: auto; */
+            /* width: 100%; */
+            max-height: 100%;
+            max-width: 100%;
         }
 
         @media screen and (max-width: 768px) {
@@ -98,7 +213,11 @@
 
 <body>
     <nav class="side-navigation">
-        <span class="menu-open">Menu</span>
+        <span class="action-button action-button-menu" onclick="openMenu()">
+            <span class="nav-text"><span class="nav-text-m">M</span><span class="nav-text-other">enu</span></span>
+            <span class="nav-close-bar nav-close-bar-left"></span>
+            <span class="nav-close-bar nav-close-bar-right"></span>
+        </span>
     </nav>
     <header class="global-header" role="banner">
         <h1>Puppy image gallery</h1>
@@ -112,72 +231,117 @@
     <main class="gallery-container">
         <section class="photo-gallery">
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/1.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/1.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/2.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/2.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/3.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/3.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/4.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/4.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/5.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/5.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/6.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/6.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/7.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/7.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/8.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/8.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/9.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/9.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/10.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/10.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/11.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/11.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/12.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/12.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/13.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/13.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/14.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/14.jpeg" alt="dog description placeholder">
             </div>
             <div class="pet-thumbnail-container">
-                <img class="pet-thumbnail-image" src="assets/images/raw/15.jpeg">
+                <img class="pet-thumbnail-image" src="assets/images/raw/15.jpeg" alt="dog description placeholder">
             </div>
         </section>
 
-        <section>
-            <button>Load More</button>
+        <section class="load-action-row">
+            <span class="action-button">Load More</span>
         </section>
     </main>
     <section class="photo-overlay">
-
+        <div class="photo-overlay-container">
+            <img src="" alt="">
+        </div>
     </section>
 
     <footer class="global-footer">
         <p>Built by a wonderful developer for Asana.</p>
     </footer>
     <script>
+        var documentBody = document.querySelector('body');
+        var petImageArr = document.getElementsByClassName('pet-thumbnail-image');
+        var photoGallery = document.querySelector('.photo-gallery');
+        var photoOverlay = document.querySelector('.photo-overlay');
+        var photoOverlayImage = document.querySelector('.photo-overlay img');
+        console.log(petImageArr);
 
-        function openDogLightBox() {
+        function openMenu() {
+            console.log('open menu');
+            var menuButton = document.querySelector('.action-button-menu');
+            var menuOpen = document.querySelector('.menu-open');
+            if (!menuOpen) {
+                menuButton.classList.add('menu-open');
+            } else {
+                menuButton.classList.remove('menu-open');
+            }
+        }
+
+        function openDogPhotoOverlay(imageSource, alternateText) {
+            console.log('openDogPhotoOverlay', imageSource);
+            photoOverlayImage.setAttribute('src', imageSource);
+            photoOverlayImage.setAttribute('alt', alternateText);
+
+            photoOverlay.classList.add('active');
+            documentBody.classList.add('stop-scrolling');
+        }
+
+        function closeDogPhotoOverlay() {
+            console.log('closeDogPhotoOverlay');
+            photoOverlay.classList.remove('active');
+            documentBody.classList.remove('stop-scrolling');
 
         }
 
         function loadMoreDogs() {
 
         }
+
+        photoGallery.addEventListener('click', function (event) {
+            console.log(event.target);
+            // In the future check for srcset too
+            if (event.target && event.target.src) {
+                openDogPhotoOverlay(event.target.src, event.target.alt);
+            }
+
+        });
+        
+        photoOverlay.addEventListener('click', function (event) {
+            closeDogPhotoOverlay();
+        });
+        
 
     </script>
 
